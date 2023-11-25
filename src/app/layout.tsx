@@ -16,6 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title>Search RISC-V instruction</title>
+        <meta name="description" content="Search RISC-V instructions" />
+        <meta property="og:title" content="Search RISC-V instruction" />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="Search RISC-V instructions" />
+        <meta property="og:url" content="https://fzr-v.vercel.app/" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
