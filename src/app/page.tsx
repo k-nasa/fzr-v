@@ -101,7 +101,11 @@ const SearchResults: FC<SearchResultsProps> = ({ searchResults }) => {
   );
 };
 
-const ListContainer = ({ children }) => (
+type Wrapper = FC<{
+  children: React.ReactNode;
+}>;
+
+const ListContainer: Wrapper = ({ children }) => (
   <div
     className={`
     flex
@@ -113,7 +117,7 @@ const ListContainer = ({ children }) => (
   </div>
 );
 
-const ListItem = ({ children }) => (
+const ListItem: Wrapper = ({ children }) => (
   // クリックアクションを追加しだしたらこれらのスタイルを使う
   // hover:border-gray-400
   // focus-within:ring-2
@@ -137,7 +141,7 @@ const ListItem = ({ children }) => (
   </div>
 );
 
-const LeftHeader = ({ children }) => (
+const LeftHeader: Wrapper = ({ children }) => (
   <div
     className={`
     flex
@@ -149,7 +153,7 @@ const LeftHeader = ({ children }) => (
   </div>
 );
 
-const RightContent = ({ children }) => (
+const RightContent: Wrapper = ({ children }) => (
   <div
     className={`
     flex
@@ -161,7 +165,7 @@ const RightContent = ({ children }) => (
   </div>
 );
 
-const Container = ({ children }) => {
+const Container: Wrapper = ({ children }) => {
   return (
     <div
       className={`
@@ -180,7 +184,7 @@ const Container = ({ children }) => {
   );
 };
 
-const Title = ({ children }) => (
+const Title: Wrapper = ({ children }) => (
   <h1
     className={`
     text-3xl
@@ -194,7 +198,7 @@ const Title = ({ children }) => (
   </h1>
 );
 
-const Caption = ({ children }) => (
+const Caption: Wrapper = ({ children }) => (
   <p
     className={`
     text-xl
@@ -207,7 +211,7 @@ const Caption = ({ children }) => (
   </p>
 );
 
-const HeaderContainer = ({ children }) => (
+const HeaderContainer: Wrapper = ({ children }) => (
   <header
     className={`
       flex
