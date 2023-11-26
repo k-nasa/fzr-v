@@ -15,18 +15,54 @@ const useSearch = (searchText: string): RiscVInstruction[] => {
     return InstructionList;
   }
 
-  const search = (text: string) =>
-    text.toUpperCase().includes(searchText.toUpperCase());
+  const search = (text: string): number =>
+    levenshteinDistance(searchText, text);
 
-  return InstructionList.filter((instruction) => {
-    return (
-      search(instruction.name) ||
-      search(instruction.description) ||
-      search(instruction.format) ||
-      search(instruction.implementation) ||
+  return InstructionList.map((instruction) => {
+    const score = Math.min(
+      search(instruction.name),
+      search(instruction.description),
+      search(instruction.format),
+      search(instruction.implementation),
       search(instruction.module)
     );
-  });
+
+    return {
+      score: score,
+      instruction: instruction,
+    };
+  })
+    .sort((a, b) => a.score - b.score)
+    .map((result) => result.instruction);
+};
+
+const levenshteinDistance = (a: string, b: string): number => {
+  const matrix = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // 置換
+          Math.min(
+            matrix[i][j - 1] + 1, // 挿入
+            matrix[i - 1][j] + 1 // 削除
+          )
+        );
+      }
+    }
+  }
+
+  return matrix[b.length][a.length];
 };
 
 export default function Home() {
@@ -86,15 +122,15 @@ const SearchResults: FC<SearchResultsProps> = ({ searchResults }) => {
     <ListContainer>
       {searchResults.map((result) => (
         <ListItem key={result.name}>
-          <LeftHeader>
+          <ListColumn>
             <h2 className="text-xl font-bold">{result.name}</h2>
             <p className="text-gray-700">{result.description}</p>
             <p className="text-gray-700">{result.module}</p>
-          </LeftHeader>
-          <RightContent>
+          </ListColumn>
+          <ListColumn>
             <p className="text-gray-700">{result.format}</p>
             <p className="text-gray-700">{result.implementation}</p>
-          </RightContent>
+          </ListColumn>
         </ListItem>
       ))}
     </ListContainer>
@@ -141,19 +177,7 @@ const ListItem: Wrapper = ({ children }) => (
   </div>
 );
 
-const LeftHeader: Wrapper = ({ children }) => (
-  <div
-    className={`
-    flex
-    flex-col
-    gap-2
-  `}
-  >
-    {children}
-  </div>
-);
-
-const RightContent: Wrapper = ({ children }) => (
+const ListColumn: Wrapper = ({ children }) => (
   <div
     className={`
     flex
