@@ -88,7 +88,6 @@ const Header = () => {
           <Title>FZR-V</Title>
           <Caption>Fuzzy Search RISC-V instructions</Caption>
         </div>
-        <p>Currently this just looks to see if it contains the word.</p>
       </div>
     </HeaderContainer>
   );
